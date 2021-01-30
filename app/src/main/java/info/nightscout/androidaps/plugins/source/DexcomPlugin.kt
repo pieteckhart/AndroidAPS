@@ -3,11 +3,9 @@ package info.nightscout.androidaps.plugins.source
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.google.gson.Gson
 import dagger.android.HasAndroidInjector
 import info.nightscout.androidaps.Config
 import info.nightscout.androidaps.Constants
@@ -25,6 +23,7 @@ import info.nightscout.androidaps.logging.AAPSLogger
 import info.nightscout.androidaps.plugins.general.nsclient.NSUpload
 import info.nightscout.androidaps.utils.DateUtil
 import info.nightscout.androidaps.utils.T
+import info.nightscout.androidaps.utils.extensions.fromBase64
 import info.nightscout.androidaps.utils.resources.ResourceHelper
 import info.nightscout.androidaps.utils.sharedPreferences.SP
 import org.json.JSONObject
@@ -95,7 +94,7 @@ class DexcomPlugin @Inject constructor(
         override fun doWork(): Result {
             if (!dexcomPlugin.isEnabled(PluginType.BGSOURCE)) return Result.failure()
             val action = inputData.getString("action")
-            val bundle = Gson().fromJson(inputData.getString("data"), Bundle::class.java)
+            val bundle = fromBase64(inputData.getString("data") ?: return Result.failure())
             try {
                 val sensorType = bundle.getString("sensorType") ?: ""
                 val glucoseValues = bundle.getBundle("glucoseValues") ?: return Result.failure()

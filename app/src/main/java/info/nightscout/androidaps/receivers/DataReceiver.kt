@@ -21,6 +21,7 @@ import info.nightscout.androidaps.utils.extensions.copyDouble
 import info.nightscout.androidaps.utils.extensions.copyInt
 import info.nightscout.androidaps.utils.extensions.copyLong
 import info.nightscout.androidaps.utils.extensions.copyString
+import info.nightscout.androidaps.utils.extensions.toBase64
 import javax.inject.Inject
 
 open class DataReceiver : DaggerBroadcastReceiver() {
@@ -96,7 +97,7 @@ open class DataReceiver : DaggerBroadcastReceiver() {
             Intents.DEXCOM_BG ->
                 OneTimeWorkRequest.Builder(DexcomPlugin.DexcomWorker::class.java)
                     .setInputData(Data.Builder().also {
-                        it.putString("data", Gson().toJson(bundle))
+                        it.putString("data", bundle.toBase64())
                         it.putString("action", intent.action)
                     }.build()).build()
             Intents.ACTION_NEW_TREATMENT,
