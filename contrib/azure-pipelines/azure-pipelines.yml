@@ -1,0 +1,44 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'macos-latest'
+
+variables:
+  - group: keystore-group
+
+steps:
+
+- bash: |
+    $ANDROID_HOME/tools/bin/sdkmanager --install "ndk;21.1.6352462"
+
+- task: Gradle@2
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx3072m'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+    tasks: 'app:assembleFullRelease'
+    
+- task: AndroidSigning@3
+  inputs:
+    apkFiles: '**/*.apk'
+    apksign: true
+    apksignerKeystoreFile: 'keystore.jks'
+    apksignerKeystorePassword: $(KeystorePassword)
+    apksignerKeystoreAlias: $(KeystoreAlias)
+    apksignerKeyPassword: $(KeyPassword)
+    zipalign: false
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: $(Build.SourcesDirectory)
+    contents: '**/*.apk'
+    targetFolder: '$(build.artifactStagingDirectory)'
+    overWrite: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/app/build/outputs/apk/full/release/'
+    artifactName: 'apks'
+    publishLocation: 'container'
