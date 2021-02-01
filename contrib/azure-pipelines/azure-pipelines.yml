@@ -28,7 +28,7 @@ steps:
     apksignerKeystorePassword: $(KeystorePassword)
     apksignerKeystoreAlias: $(KeystoreAlias)
     apksignerKeyPassword: $(KeyPassword)
-    zipalign: false
+    zipalign: true
 
 - task: CopyFiles@2
   inputs:
@@ -40,5 +40,10 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/app/build/outputs/apk/full/release/'
-    artifactName: 'apks'
+    artifactName: 'app'
+    publishLocation: 'container'
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/wear/build/outputs/apk/full/release/'
+    artifactName: 'wear'
     publishLocation: 'container'
