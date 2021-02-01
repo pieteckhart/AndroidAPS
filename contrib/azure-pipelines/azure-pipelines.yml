@@ -28,7 +28,7 @@ steps:
     apksignerKeystorePassword: $(KeystorePassword)
     apksignerKeystoreAlias: $(KeystoreAlias)
     apksignerKeyPassword: $(KeyPassword)
-    zipalign: true
+    zipalign: false
 
 - task: CopyFiles@2
   inputs:
