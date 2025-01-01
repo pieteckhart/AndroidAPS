@@ -48,8 +48,9 @@ steps:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/app/build/outputs/apk/full/release/'
     artifactName: 'app'
     publishLocation: 'container'
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/wear/build/outputs/apk/full/release/'
-    artifactName: 'wear'
-    publishLocation: 'container'
+    
+#- task: PublishBuildArtifacts@1
+#  inputs:
+#    pathtoPublish: '$(Build.ArtifactStagingDirectory)/wear/build/outputs/apk/full/release/'
+#    artifactName: 'wear'
+#   publishLocation: 'container'
